@@ -72,11 +72,12 @@ class BaseFacebookCallback(object):
             # try the session if available
             if hasattr(request, "session"):
                 redirect_to = request.session.get(session_key_value)
-                # Heavier security check -- don't allow redirection to a different host.
-                netloc = urlparse.urlparse(redirect_to)[1]
-                if netloc and netloc != request.host:
-                    logger.warning("redirect_to host does not match orgin")
-                    redirect_to = fallback_url
+                if redirect_to:
+                    # Heavier security check -- don't allow redirection to a different host.
+                    netloc = urlparse.urlparse(redirect_to)[1]
+                    if netloc and netloc != request.host:
+                        logger.warning("redirect_to host does not match orgin")
+                        redirect_to = fallback_url
         if not redirect_to:
             logger.debug("no redirect found, using fallback")
             redirect_to = fallback_url
